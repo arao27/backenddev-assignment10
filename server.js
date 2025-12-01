@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 const { db, User, Task } = require('./database/setup');
 require('dotenv').config();
 
-const app = express();
-const PORT = 3000;
+const cors = require('cors');
+app.use(cors());
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
