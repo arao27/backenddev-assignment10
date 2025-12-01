@@ -5,6 +5,7 @@ const { db, User, Task } = require('./database/setup');
 require('dotenv').config();
 
 const cors = require('cors');
+const app = express(); // <-- added this line
 app.use(cors());
 const PORT = process.env.PORT || 3000;
 
@@ -66,6 +67,15 @@ app.get('/health', (req, res) => {
     });
 });
 
+// --- NEW: API health endpoint for auto-deploy ---
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'API is running',
+        environment: process.env.NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Root endpoint
 app.get('/', (req, res) => {
     res.json({
@@ -73,6 +83,7 @@ app.get('/', (req, res) => {
         version: '1.0.0',
         endpoints: {
             health: '/health',
+            apiHealth: '/api/health', // <-- added reference
             register: 'POST /api/register',
             login: 'POST /api/login',
             tasks: 'GET /api/tasks (requires auth)',
